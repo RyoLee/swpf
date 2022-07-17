@@ -17,13 +17,6 @@ def run_gabes_code():
         user_input = input()
         if user_input == '':
             break
-        elif len(user_input) == 7:
-            #appending a 0 to front to work with EDOPRO YDK files
-            #that delete leading zeros....
-            user_input = '0' + user_input
-            deck.append(int(user_input))
-        elif len(user_input) != 8:
-            pass
         else:
             deck.append(int(user_input))
     # remove duplicates
