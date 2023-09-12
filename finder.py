@@ -9,7 +9,28 @@ def getScore(card, comparison):
             score = score + 1
     return score
 
-def run_gabes_code():
+# deck content like:
+# #main
+# 22345
+# 52345
+# #extra
+# !side
+# we need numbers after #main and before #extra or !side
+# returns list of numbers
+def make_deck_from_string(string):
+    deck = []
+    lines = string.split('\n')
+    found_main = False
+    for line in lines:
+        if line.startswith('#main'):
+            found_main = True
+        elif line.startswith('#extra') or line.startswith('!side'):
+            break
+        elif found_main:
+            deck.append(int(line))
+    return deck
+
+def make_deck_from_input():
     deck = []
     print("复制并粘贴你的卡组文件(.ydk格式)中#main到下一个#开头部分(为#side或#extra)的全部数字,不包含#main和#side,", 
         "(完成后按2次回车结束): ")
@@ -19,6 +40,10 @@ def run_gabes_code():
             break
         else:
             deck.append(int(user_input))
+    return deck
+
+
+def run_gabes_code(deck):
     # remove duplicates
     deck = set(list(deck))
 
@@ -189,6 +214,9 @@ def main():
 3. YDK卡组路径生成
    通过YDK卡组ID生成卡组检索路径.
 
+4. 从YDK文件路径开始
+   粘贴ydk文件路径然后检索卡组搜索路径.
+
 q. 退出
 选择: """
         )
@@ -208,8 +236,12 @@ q. 退出
                 find_small_world_compatible(card)
         elif mode == "3":
             print('--------------')
-            run_gabes_code()
+            run_gabes_code(make_deck_from_input())
 
+        elif mode == "4":
+            print('--------------')
+            with open(input("YDK文件路径: "), "r") as f:
+                run_gabes_code(make_deck_from_string(f.read()))
         elif mode == "q":
             break
         else:
